@@ -1,7 +1,7 @@
 import Image from "next/image";
-import Logo from "@/app/components/logo";
+import Logo from "@/app/ui/logo";
 import Link from "next/link";
-import Card from "./components/card";
+import Card from "./ui/card";
 
 export default function Home() {
   return (

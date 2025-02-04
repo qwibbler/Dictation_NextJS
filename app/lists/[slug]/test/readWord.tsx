@@ -1,5 +1,5 @@
 "use client"
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import Image from "next/image";
 
 interface ReadWordProps {
@@ -8,17 +8,12 @@ interface ReadWordProps {
 }
 
 export default function ReadWord({ word, autoSpeak = true }: ReadWordProps) {
-  useEffect(() => {
-    if (autoSpeak) {
-      speak();
-    }
-  }, [word, autoSpeak]);
-
   if (!word) {
     return <div>Loading...</div>;
   }
 
-  const speak = () => {
+  // Memoize the `speak` function to avoid unnecessary re-renders
+  const speak = useCallback(() => {
     if (typeof window !== "undefined" && "speechSynthesis" in window) {
       const speechSynth = window.speechSynthesis;
       if (!speechSynth.speaking) {
@@ -28,7 +23,13 @@ export default function ReadWord({ word, autoSpeak = true }: ReadWordProps) {
     } else {
       console.error("Speech synthesis not supported in this browser.");
     }
-  };
+  }, [word]);
+
+  useEffect(() => {
+    if (autoSpeak) {
+      speak();
+    }
+  }, [word, autoSpeak, speak]);
 
   return (
     <button
@@ -47,5 +48,5 @@ export default function ReadWord({ word, autoSpeak = true }: ReadWordProps) {
         Listen Again
       </span>
     </button>
-  )
+  );
 }

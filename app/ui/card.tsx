@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 
 interface CardProps {
   header: string;
@@ -22,7 +23,7 @@ export default function Card({ header, text, img, button }: CardProps) {
         )}
 
         {img && (
-          <Image src={img} />
+          <Image src={img} alt="" />
         )}
 
         {button && (
