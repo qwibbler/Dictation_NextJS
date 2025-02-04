@@ -8,16 +8,12 @@ interface ReadWordProps {
 }
 
 export default function ReadWord({ word, autoSpeak = true }: ReadWordProps) {
-  if (!word) {
-    return <div>Loading...</div>;
-  }
-
   // Memoize the `speak` function to avoid unnecessary re-renders
   const speak = useCallback(() => {
     if (typeof window !== "undefined" && "speechSynthesis" in window) {
       const speechSynth = window.speechSynthesis;
       if (!speechSynth.speaking) {
-        const newUtter = new SpeechSynthesisUtterance(word);
+        const newUtter = new SpeechSynthesisUtterance(word || "");
         speechSynth.speak(newUtter);
       }
     } else {
@@ -30,6 +26,10 @@ export default function ReadWord({ word, autoSpeak = true }: ReadWordProps) {
       speak();
     }
   }, [word, autoSpeak, speak]);
+
+  if (!word) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <button
